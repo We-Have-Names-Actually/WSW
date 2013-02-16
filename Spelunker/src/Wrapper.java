@@ -8,8 +8,10 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -20,8 +22,8 @@ public class Wrapper extends BasicGame{
 	public static int gamewidth = 1000;
 	public static int gameheight = 700;
 	Input myinput = new Input(600);
-	private Texture background;
-	private Texture hero;
+	private Image background;
+	private Image hero;
 	private float x = 400, y = 300;
 	private int jumplength = 0;
 	private boolean jumping, onground;
@@ -34,6 +36,7 @@ public class Wrapper extends BasicGame{
     @Override
     public void init(GameContainer gc) 
 			throws SlickException {
+<<<<<<< HEAD
     	try {
     		gc.setMinimumLogicUpdateInterval(2);
     		gc.setMaximumLogicUpdateInterval(2);
@@ -43,6 +46,13 @@ public class Wrapper extends BasicGame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+=======
+    	gc.setMaximumLogicUpdateInterval(1);
+		gc.setMinimumLogicUpdateInterval(1);
+		hero = new Image("res/hero.png");
+		background = new Image("res/cave.jpg");
+		SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
+>>>>>>> b90eacec667c2d140993c347c281e1b09d0b8993
     }
  
     @Override
@@ -64,11 +74,18 @@ public class Wrapper extends BasicGame{
     		 if(issolid(x, y-1) && onground == true){
     			 jumping = true;
     			 onground = false;
+<<<<<<< HEAD
     		}else if(jumping && issolid(x, y-1)){
     			y-=1;
     			
     		}
     		 
+=======
+    		 }
+    		 if(jumping && jumplength <150){
+    			 y-=1;
+    		 }
+>>>>>>> b90eacec667c2d140993c347c281e1b09d0b8993
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
@@ -106,34 +123,12 @@ public class Wrapper extends BasicGame{
     public void render(GameContainer gc, Graphics g) 
 			throws SlickException 
     {
+    	background.draw(0,0);    	
+    	hero.draw(x,y);
     	
-    	background.bind();
-    	
-    	
-    	GL11.glBegin(GL11.GL_QUADS);
-    	GL11.glTexCoord2f(0,0);
-    	GL11.glVertex2f(0,0);
-    	GL11.glTexCoord2f(1,0);
-    	GL11.glVertex2f(background.getTextureWidth(),0);
-    	GL11.glTexCoord2f(1,1);
-    	GL11.glVertex2f(background.getTextureWidth(),background.getTextureHeight());
-    	GL11.glTexCoord2f(0,1);
-    	GL11.glVertex2f(0,background.getTextureHeight());
-    	GL11.glEnd();
-    	
-    	hero.bind();
-    	
-    	GL11.glBegin(GL11.GL_QUADS);
-    	GL11.glTexCoord2f(0,0);
-    	GL11.glVertex2f(x,y);
-    	GL11.glTexCoord2f(1,0);
-    	GL11.glVertex2f(x+hero.getTextureWidth(),y);
-    	GL11.glTexCoord2f(1,1);
-    	GL11.glVertex2f(x+hero.getTextureWidth(),y+hero.getTextureHeight());
-    	GL11.glTexCoord2f(0,1);
-    	GL11.glVertex2f(x,y+hero.getTextureHeight());
-    	GL11.glEnd();
-    	
+    	Image spike = new Image("res/spike.png");
+    	spike.draw(900, 650);
+
     }
  
     public static void main(String[] args) 
