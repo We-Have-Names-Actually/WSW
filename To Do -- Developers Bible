@@ -6,20 +6,19 @@ Big idea:
 - Tile based map generation
 
 Map Generation:
-
-
+-Procedural
+-Vertical
 
 
 Player and World Mechanics: 
-
+-Inputs
 
 
 
 
 Player Interactions:
-
-
-
+-Collisions
+-Attacks
 
 
 
