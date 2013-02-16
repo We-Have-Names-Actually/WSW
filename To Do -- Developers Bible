@@ -1,0 +1,58 @@
+To Do:
+
+Big idea:
+- 2D side scroller
+
+- Revolved around multidirectional movement with simple combat (Mario cave man)
+ - Options: Constant Side scroll player must keep up with?
+   Level scrolls with player? Limited backwards movement?
+
+ - Environment
+  - Cave
+   - black boarders around cave
+   - obstacles, boxes, pitfalls, headroom limiters (low ceiling), Cave in? Rock fall?
+   - Lighting, could be important torches and lanterns? Flashlights?
+     Overall not necessary, could be kept consistent.
+   - Interactions: power-ups (no damage, health recharge?)
+
+ - Player
+  - Player movements
+   - Basic four directions
+   - Special Moves: jumping, ducking
+   - possible acceleration/ deceleration
+
+  - Player Abilities
+   - Attack
+
+  - Player Status 
+   - health status (percentage, hits taken (three strikes you're out?))
+   - status of tools (ammunition if projectiles)
+   - optional: progress indicator (slide bar?)
+
+- Tile based map generation
+  - tile size
+  - tile types
+  - tile traversal
+
+IMPORTANT STUFFS:
+
+Graphic Generation:
+-Procedural
+-Vertical
+
+
+Player and World Mechanics: 
+-Inputs
+ - Directional keys
+ - Action key (attacking)
+
+
+
+
+Player Interactions:
+-Collisions
+-Attacks
+
+
+
+Flavor (to be added later):
