@@ -35,6 +35,8 @@ public class Wrapper extends BasicGame{
     public void init(GameContainer gc) 
 			throws SlickException {
     	try {
+    		gc.setMaximumLogicUpdateInterval(1);
+    		gc.setMinimumLogicUpdateInterval(1);
     		hero = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hero.png"));
 			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/cave.JPG"));
 		} catch (IOException e) {
