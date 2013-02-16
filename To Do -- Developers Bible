@@ -14,17 +14,19 @@ Big idea:
    - Lighting, could be important torches and lanterns? Flashlights?
      Overall not necessary, could be kept consistent.
    - Interactions: power-ups (no damage, health recharge?)
+ -Player
+  - Player movements
+   - Basic four directions
+   - Special Moves: jumping, ducking
+   - possible acceleration/ deceleration
 
- - Player movements
-  - Basic four directions
-  - Special Moves: jumping, ducking
-  - possible acceleration/ deceleration
+  - Player Abilities
+   - Attack
 
-- UI Elements
- - Player Status 
-  - health status (percentage, hits taken (three strikes you're out?))
-  - status of tools (ammunition if projectiles)
-  - optional: progress indicator (slide bar?)
+  - Player Status 
+   - health status (percentage, hits taken (three strikes you're out?))
+   - status of tools (ammunition if projectiles)
+   - optional: progress indicator (slide bar?)
 
 - Tile based map generation
   - tile size
