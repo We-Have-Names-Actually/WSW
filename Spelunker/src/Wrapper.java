@@ -35,6 +35,8 @@ public class Wrapper extends BasicGame{
     public void init(GameContainer gc) 
 			throws SlickException {
     	try {
+    		gc.setMinimumLogicUpdateInterval(2);
+    		gc.setMaximumLogicUpdateInterval(2);
     		hero = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hero.png"));
 			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/cave.JPG"));
 		} catch (IOException e) {
@@ -62,7 +64,11 @@ public class Wrapper extends BasicGame{
     		 if(issolid(x, y-1) && onground == true){
     			 jumping = true;
     			 onground = false;
-    		 }
+    		}else if(jumping && issolid(x, y-1)){
+    			y-=1;
+    			
+    		}
+    		 
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
@@ -74,7 +80,7 @@ public class Wrapper extends BasicGame{
     	 }else
     		 onground = true;
     	 if(jumping && jumplength < 150){
-    		 y -=1.5;
+    		 y -=1.0;
     		 jumplength++;
     		 if(jumplength >= 150){
     			 jumplength = 0;
