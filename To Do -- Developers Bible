@@ -7,7 +7,7 @@ Big idea:
  - Options: Constant Side scroll player must keep up with?
    Level scrolls with player? Limited backwards movement?
 
- - Enviroment
+ - Environment
   - Cave
    - black boarders around cave
    - obstacles, boxes, pitfalls, headroom limiters (low ceiling), Cave in? Rock fall?
@@ -27,9 +27,9 @@ Big idea:
   - optional: progress indicator (slide bar?)
 
 - Tile based map generation
-  -tile size
-  -tile types
-  
+  - tile size
+  - tile types
+  - tile traversal
 
 IMPORTANT STUFFS:
 
