@@ -2,8 +2,32 @@ To Do:
 
 Big idea:
 - 2D side scroller
+
 - Revolved around multidirectional movement with simple combat
+ - Options: Constant Side scroll player must keep up with?
+   Level scrolls with player? Limited backwards movement?
+
+ - Enviroment
+  - Cave
+   - black boarders around cave
+   - obstacles, boxes, pitfalls, headroom limiters (low ceiling) 
+
+ -Player movements
+  - Basic four directions
+  - Special Moves: jumping, ducking
+  - possible acceleration/ deceleration
+
+
+ -Player Status
+  - health status (percentage, hits taken (three strikes your out?))
+  - 
+
+
 - Tile based map generation
+  -tile size
+  -tile types
+   -environmental interactions: power-ups (no damage, health recharge?)
+
 
 Map Generation:
 -Procedural
