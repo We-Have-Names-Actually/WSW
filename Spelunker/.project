@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
+	<name>Spelunker</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
+=======
     <name>World of Spelunking Warrior</name>
         <comment></comment>
             <projects>
@@ -15,3 +32,4 @@
                                                                                         <nature>org.eclipse.jdt.core.javanature</nature>
                                                                                             </natures>
                                                                                             </projectDescription>
+>>>>>>> b90eacec667c2d140993c347c281e1b09d0b8993
