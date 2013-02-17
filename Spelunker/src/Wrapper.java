@@ -35,24 +35,17 @@ public class Wrapper extends BasicGame{
  
     @Override
     public void init(GameContainer gc) 
-			throws SlickException {
-<<<<<<< HEAD
-    	try {
-    		gc.setMinimumLogicUpdateInterval(2);
-    		gc.setMaximumLogicUpdateInterval(2);
-    		hero = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/hero.png"));
-			background = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("res/cave.JPG"));
-		} catch (IOException e) {
+    {
+    	gc.setMaximumLogicUpdateInterval(1);
+		gc.setMinimumLogicUpdateInterval(1);
+		try {
+			hero = new Image("res/hero.png");
+			background = new Image("res/cave.jpg");
+		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-=======
-    	gc.setMaximumLogicUpdateInterval(1);
-		gc.setMinimumLogicUpdateInterval(1);
-		hero = new Image("res/hero.png");
-		background = new Image("res/cave.jpg");
-		SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
->>>>>>> b90eacec667c2d140993c347c281e1b09d0b8993
+
     }
  
     @Override
@@ -74,18 +67,10 @@ public class Wrapper extends BasicGame{
     		 if(issolid(x, y-1) && onground == true){
     			 jumping = true;
     			 onground = false;
-<<<<<<< HEAD
     		}else if(jumping && issolid(x, y-1)){
     			y-=1;
     			
     		}
-    		 
-=======
-    		 }
-    		 if(jumping && jumplength <150){
-    			 y-=1;
-    		 }
->>>>>>> b90eacec667c2d140993c347c281e1b09d0b8993
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
