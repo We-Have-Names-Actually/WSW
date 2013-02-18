@@ -25,13 +25,13 @@ public class Room {
 		ylocation = 0;
 		westx = 400;
 		westy = 300;
-		/**for(int i = 0; i < width; i++){
+		for(int i = 0; i < width; i++){
 			terrain[i][height-1] = 1;
 			Rectangle brick = new Rectangle(i*50, (height-1)*50, 50, 50);
 			blocks.add(brick);
-		}**/
+		}
 		for(int i = 0; i < 13;i++){
-			int place = getRand(0,width);
+			int place = getRand(0,width-1);
 			int y = height-1;
 			boolean found = true;
 			while(found){
@@ -61,45 +61,45 @@ public class Room {
 		this.xlocation = xlocation;
 		this.ylocation = ylocation;
 		if(world.isroom(xlocation, ylocation+1)){
-			if(world.roomat(xlocation, ylocation + 1).southexit){
-				northexit = true;
+			//if(world.roomat(xlocation, ylocation + 1).southexit){
+				southexit = true;
 				northx = 400;
 				northy = 150;
-			}
-		}else if(getRand(0,2) == 1){
-			northexit = true;
+			//}
+		}else if(getRand(0,2) == 0){
+			southexit = true;
 			northx = 400;
 			northy = 150;
 		}
 		if(world.isroom(xlocation, ylocation-1)){
-			if(world.roomat(xlocation, ylocation - 1).northexit){
-				southexit = true;
+			//if(world.roomat(xlocation, ylocation - 1).northexit){
+				northexit = true;
 				southx = 400;
 				southy = 150;
-			}
-		} else if(getRand(0,1) == 1){
-			southexit = true;
+			//}
+		} else if(getRand(0,1) == 0){
+			northexit = true;
 			southx = 400;
 			southy = 150;
 		}
 		if(world.isroom(xlocation-1, ylocation)){
-			if(world.roomat(xlocation-1, ylocation).eastexit){
+			//if(world.roomat(xlocation-1, ylocation).eastexit){
 				westexit = true;
 				westx = 400;
 				westy = 150;
-			}
-		}else if(getRand(0,1) == 1){
+			//}
+		}else if(getRand(0,1) == 0){
 			westexit = true;
 			westx = 400;
 			westy = 150;
 		}
 		if(world.isroom(xlocation+1, ylocation)){
-			if(world.roomat(xlocation+1, ylocation).westexit){
+			//if(world.roomat(xlocation+1, ylocation).westexit){
 				eastexit = true;
 				eastx = 400;
 				easty = 150;
-			}
-		}else if(getRand(0,1) == 1){
+			//}
+		}else if(getRand(0,1) == 0){
 			eastexit = true;
 			eastx = 400;
 			easty = 150;
@@ -119,7 +119,7 @@ public class Room {
 			}
 
 			if(northexit){
-				if(i <= 4 || i >= 10 ){
+				if(i <= 0 || i >= 19 ){
 					terrain[i][0] = 1;
 					Rectangle brick = new Rectangle(i*50, 0, 50, 50);
 					blocks.add(brick);
@@ -147,13 +147,30 @@ public class Room {
 			if(eastexit){
 				if(i <= 1 || i >= 5 ){
 					terrain[width-1][i] = 1;
-					Rectangle brick = new Rectangle(width*50, i*50, 50, 50);
+					Rectangle brick = new Rectangle((width-1)*50, i*50, 50, 50);
 					blocks.add(brick);
 				}
 			}else{
 				terrain[width-1][i] = 1;
-				Rectangle brick = new Rectangle(width*50, i*50, 50, 50);
+				Rectangle brick = new Rectangle((width-1)*50, i*50, 50, 50);
 				blocks.add(brick);
+			}
+		}
+		for(int i = 0; i < 13;i++){
+			int place = getRand(1,width-2);
+			int y = height-1;
+			boolean found = true;
+			while(found){
+				
+				if(terrain[place][y] != 1){
+					terrain[place][y] = 1;
+					found = false;
+					Rectangle brick = new Rectangle(place*50, y*50, 50, 50);
+					blocks.add(brick);
+				}
+				y--;
+				if(y < 0)
+					found = false;
 			}
 		}
 	}
@@ -168,7 +185,7 @@ public class Room {
  
 		//make a new randomizer seeded with the new seed
 		Random randomizer = new Random(seed);
-		int n = max - min;
+		int n = 1+max - min;
 		int i = randomizer.nextInt(n);
 		//if for some reason it ends up negative turn it positive
 		if (i < 0)

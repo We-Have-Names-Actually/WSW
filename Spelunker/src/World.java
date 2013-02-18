@@ -35,6 +35,7 @@ public class World {
 				if(map.get(i).xlocation == current.xlocation && map.get(i).ylocation == current.ylocation + 1){
 					where.x = map.get(i).southx;
 					where.y = map.get(i).southy;
+					where.room = map.get(i);
 					return map.get(i);
 				}
 			}
@@ -51,6 +52,7 @@ public class World {
 				if(map.get(i).xlocation == current.xlocation + 1 && map.get(i).ylocation == current.ylocation){
 					where.x = map.get(i).westx;
 					where.y = map.get(i).westy;
+					where.room = map.get(i);
 					return map.get(i);
 				}
 			}
@@ -67,6 +69,7 @@ public class World {
 				if(map.get(i).xlocation == current.xlocation && map.get(i).ylocation == current.ylocation - 1){
 					where.x = map.get(i).northx;
 					where.y = map.get(i).northy;
+					where.room = map.get(i);
 					return map.get(i);
 				}
 			}
@@ -83,6 +86,7 @@ public class World {
 				if(map.get(i).xlocation == current.xlocation - 1 && map.get(i).ylocation == current.ylocation){
 					where.x = map.get(i).eastx;
 					where.y = map.get(i).easty;
+					where.room = map.get(i);
 					return map.get(i);
 				}
 			}
