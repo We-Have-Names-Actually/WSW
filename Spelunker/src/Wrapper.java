@@ -2,19 +2,15 @@
  
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
+import org.newdawn.slick.geom.Rectangle;
  
 public class Wrapper extends BasicGame{
 	
@@ -22,9 +18,12 @@ public class Wrapper extends BasicGame{
 	public static int gamewidth = 1000;
 	public static int gameheight = 700;
 	Input myinput = new Input(600);
+	Room room;
 	private Image background;
 	private Image hero;
-	private float x = 400, y = 300;
+	private Rectangle herolocation;
+	private World world;
+	public float x = 400, y = 300;
 	private int jumplength = 0;
 	private boolean jumping, onground;
  
@@ -35,17 +34,16 @@ public class Wrapper extends BasicGame{
  
     @Override
     public void init(GameContainer gc) 
-    {
+
+			throws SlickException {
     	gc.setMaximumLogicUpdateInterval(1);
 		gc.setMinimumLogicUpdateInterval(1);
-		try {
-			hero = new Image("res/hero.png");
-			background = new Image("res/cave.jpg");
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		world = new World();
+		hero = new Image("res/hero.png");
+		background = new Image("res/cave.jpg");
+		herolocation = new Rectangle(x,y,49,49);
+		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
+        room = world.map.getFirst();
     }
  
     @Override
@@ -54,35 +52,47 @@ public class Wrapper extends BasicGame{
     {
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
-    		 if(issolid(x-1, y))
-    			 x-=.5;
+    		if(issolid(x-1, y-1, herolocation)){
+    			 x-=.4;
+    			 herolocation.setLocation(x, y);
+    		 }else
+    			 onground = true;
          }
     	 if(myinput.isKeyDown(myinput.KEY_D) || myinput.isKeyDown(myinput.KEY_RIGHT))
          {
-    		 if(issolid(x+160, y))
-    			 x+= .5;
+    		 if(issolid(x+1, y-1, herolocation)){
+    			 x+= .4;
+    			 herolocation.setLocation(x, y);
+    		 }else
+    			 onground = true;
          }
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
-    		 if(issolid(x, y-1) && onground == true){
+    		 if(issolid(x, y-1, herolocation) && onground == true){
     			 jumping = true;
     			 onground = false;
-    		}else if(jumping && issolid(x, y-1)){
-    			y-=1;
-    			
-    		}
+    		 }
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
-    		 if(issolid(x, y+140))
-    			 y += .5;
+    		 if(issolid(x, y, herolocation)){
+    			 y += .3;
+    			 herolocation.setLocation(x, y);
+    		 }
          }
-    	 if(issolid(x, y+140)){
+    	 if(myinput.isKeyDown(myinput.KEY_P))
+         {
+    		for(int i = 0; i < world.map.size();i++)
+    			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
+         }
+    	 if(issolidfalling(x, y, herolocation)){
     		 y+=.5;
+    		 herolocation.setLocation(x, y);
     	 }else
     		 onground = true;
     	 if(jumping && jumplength < 150){
     		 y -=1.0;
+    		 herolocation.setLocation(x, y);
     		 jumplength++;
     		 if(jumplength >= 150){
     			 jumplength = 0;
@@ -92,27 +102,82 @@ public class Wrapper extends BasicGame{
     	 }
         
     }
- 
-    public boolean issolid(float x, float y){
-    	if(y  > gameheight)
-    		return false;
-    	if(x < 0)
-    		return false;
-    	if(x > gamewidth)
-    		return false;
-    	if(y < 0)
-    		return false;
+    public boolean issolid(float x, float y, Rectangle herolocation){
+		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
+		
+    	if(y  > gameheight){
+    		world.changeroom(room, 0, this);
+    	}
+    	if(x < 0){
+    		world.changeroom(room, 3, this);
+    	}
+    	if(x > gamewidth){
+    		world.changeroom(room, 1, this);
+    	}	
+    	if(y < 0){
+    		world.changeroom(room, 2, this);
+    	}
+    		
+    	
+    	herolocation.setLocation(x, y);
+    	
+    	for(int i = 0; i < room.blocks.size();i++){
+    		if(herolocation.intersects(room.blocks.get(i))){
+    			herolocation.setLocation(tmpx, tmpy);
+    			return false;
+    		}
+    	}
+    	
     	return true;
     }
+ 
+    public boolean issolidfalling(float x, float y, Rectangle herolocation){
+		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
+		
+    	/**if(y  > gameheight){
+    		world.changeroom(room, 0, this);
+    	}
+    	if(x < 0){
+    		world.changeroom(room, 3, this);
+    	}
+    	if(x > gamewidth){
+    		world.changeroom(room, 1, this);
+    	}	
+    	if(y < 0){
+    		world.changeroom(room, 2, this);
+    	}**/
+    		
+    	
+    	herolocation.setLocation(x, y);
+    	
+    	for(int i = 0; i < room.blocks.size();i++){
+    		if(herolocation.intersects(room.blocks.get(i))){
+    			herolocation.setLocation(tmpx, tmpy);
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    
     
     public void render(GameContainer gc, Graphics g) 
 			throws SlickException 
     {
     	background.draw(0,0);    	
     	hero.draw(x,y);
+    	Image brick = new Image("res/dirt.png");
+    	for(int i = 0; i < room.width;i++){
+    		for(int j = 0; j < room.height;j++){
+    			if(room.terrain[i][j] == 1){
+    				brick.draw(i*50,j*50);
+    			}
+    		}
+    	}
     	
-    	Image spike = new Image("res/spike.png");
-    	spike.draw(900, 650);
+    	//Image spike = new Image("res/spike.png");
+    	//spike.draw(900, 650);
 
     }
  
