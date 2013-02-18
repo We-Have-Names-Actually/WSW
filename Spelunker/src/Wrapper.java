@@ -1,6 +1,7 @@
 
  
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -23,9 +24,12 @@ public class Wrapper extends BasicGame{
 	private Image hero;
 	private Rectangle herolocation;
 	private World world;
+	private ArrayList<Entity> tempImg;
 	public float x = 400, y = 300;
 	private int jumplength = 0;
-	private boolean jumping, onground;
+	private boolean jumping, onground, facingLeft;
+	private int health = 5;
+	private int damage = 5;
  
     public Wrapper()
     {
@@ -34,8 +38,8 @@ public class Wrapper extends BasicGame{
  
     @Override
     public void init(GameContainer gc) 
-
 			throws SlickException {
+    	tempImg = new ArrayList<Entity>();
     	gc.setMaximumLogicUpdateInterval(1);
 		gc.setMinimumLogicUpdateInterval(1);
 		world = new World();
@@ -50,8 +54,38 @@ public class Wrapper extends BasicGame{
     public void update(GameContainer gc, int delta) 
 			throws SlickException     
     {
+
+    	 if(myinput.isKeyDown(Input.KEY_SPACE))
+    	 {
+    		 int toRemove = -1;
+    		 boolean hit = false;
+    		 int modifier = 49;
+    		 if(facingLeft == true)
+    		 {
+    			 modifier = -20;
+    		 }
+    		 tempImg.add(new Entity("res/hitbox.jpg", (int)x+modifier, (int)y));
+    		 Rectangle attack = new Rectangle(x+modifier, y-49, 25, 50);
+    		 for(Entity enemy : room.enemies)
+    		 {
+    			 if(enemy.type == Entity.Type.ENEMY && enemy.collision(attack))
+    			 {
+    				 hit = true;
+    				 if(!enemy.damage(1))
+    				 {
+    					 toRemove = room.enemies.indexOf(enemy);
+    				 }
+    			 }
+    		 }
+    		 if (room.enemies.size() > toRemove && toRemove > -1 && hit == true){
+    			 room.enemies.remove(toRemove);
+    		 }
+    		 
+    	 }
+    	 
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
+    		 facingLeft = true;
     		if(issolid(x-1, y-1, herolocation)){
     			 x-=.4;
     			 herolocation.setLocation(x, y);
@@ -60,6 +94,7 @@ public class Wrapper extends BasicGame{
          }
     	 if(myinput.isKeyDown(myinput.KEY_D) || myinput.isKeyDown(myinput.KEY_RIGHT))
          {
+    		 facingLeft = false;
     		 if(issolid(x+1, y-1, herolocation)){
     			 x+= .4;
     			 herolocation.setLocation(x, y);
@@ -99,6 +134,45 @@ public class Wrapper extends BasicGame{
     			 jumping = false;
     		 }
     			 
+    	 }
+    	 
+    	 for(Entity entity : room.enemies)
+    	 {
+    		 if(entity.y < 700 && issolid(entity.x, entity.y+1, entity.location))
+    			 entity.move(entity.x, entity.y+1);
+    		 
+    		 if(x > entity.x)
+    			 entity.move((int)x+1, (int)y);
+    		 else
+    			 entity.move((int)x-1, (int)y);
+    		 
+    		 if(entity.collision(herolocation))
+    		 {
+    			 //This is about where we need to decide if the player dies or whatever
+    			 switch(entity.type)
+    			 {
+    			 case KILL_BOX:
+    				 //This is the part where you die
+    				 health = 0;
+    				 break;
+    				 
+    			 case ENEMY:
+    				 //This is the part where we damage the enemy or something
+    				 health -= 1;
+    				 //entity.damage(1);
+    				 System.out.println("Damage calc, player health: " + health);
+    				 break;
+    				 
+    			 case OBJECT:
+    				 //This is the part where maybe there's dialog or something
+    				 break;
+    				 
+    			 case OBSTACLE:
+    				 //Probably don't actually need this but it's here
+    				 break;
+    				 
+    			 }
+    		 }
     	 }
         
     }
@@ -167,6 +241,18 @@ public class Wrapper extends BasicGame{
     {
     	background.draw(0,0);    	
     	hero.draw(x,y);
+    	
+    	for(Entity entity : room.enemies)
+    	{
+    		entity.draw();
+    	}
+    	
+    	for(Entity img : tempImg)
+    	{
+    		img.draw();
+    	}
+    	tempImg.clear();
+    	
     	Image brick = new Image("res/dirt.png");
     	for(int i = 0; i < room.width;i++){
     		for(int j = 0; j < room.height;j++){

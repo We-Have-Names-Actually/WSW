@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -13,6 +14,7 @@ public class Room {
 	public int xlocation, ylocation;
 	private static long oldseed = 0;
 	public LinkedList<Rectangle> blocks = new LinkedList<Rectangle>();
+	public ArrayList<Entity> enemies = new ArrayList<Entity>();
 	
 	
 	Room(){
