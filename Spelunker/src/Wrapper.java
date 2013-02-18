@@ -10,6 +10,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
  
 public class Wrapper extends BasicGame{
 	
@@ -20,9 +21,11 @@ public class Wrapper extends BasicGame{
 	Room room;
 	private Image background;
 	private Image hero;
-	private float x = 400, y = 300;
+	private Rectangle herolocation;
+	private World world;
+	public float x = 400, y = 300;
 	private int jumplength = 0;
-	private boolean jumping, onground, why;
+	private boolean jumping, onground;
  
     public Wrapper()
     {
@@ -31,13 +34,16 @@ public class Wrapper extends BasicGame{
  
     @Override
     public void init(GameContainer gc) 
+
 			throws SlickException {
     	gc.setMaximumLogicUpdateInterval(1);
 		gc.setMinimumLogicUpdateInterval(1);
+		world = new World();
 		hero = new Image("res/hero.png");
 		background = new Image("res/cave.jpg");
+		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
-        room = new Room();
+        room = world.map.getFirst();
     }
  
     @Override
@@ -46,35 +52,47 @@ public class Wrapper extends BasicGame{
     {
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
-    		 if(issolid(x-1, y, 4))
-    			 x-=.5;
+    		if(issolid(x-1, y-1, herolocation)){
+    			 x-=.4;
+    			 herolocation.setLocation(x, y);
+    		 }else
+    			 onground = true;
          }
     	 if(myinput.isKeyDown(myinput.KEY_D) || myinput.isKeyDown(myinput.KEY_RIGHT))
          {
-    		 if(issolid(x+50, y, 1))
-    			 x+= .5;
+    		 if(issolid(x+1, y-1, herolocation)){
+    			 x+= .4;
+    			 herolocation.setLocation(x, y);
+    		 }else
+    			 onground = true;
          }
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
-    		 if(issolid(x, y-1, 0) && onground == true){
+    		 if(issolid(x, y-1, herolocation) && onground == true){
     			 jumping = true;
     			 onground = false;
-    		 }
-    		 if(jumping && jumplength <150){
-    			 y-=1;
     		 }
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
-    		 if(issolid(x, y+50, 3))
-    			 y += .5;
+    		 if(issolid(x, y, herolocation)){
+    			 y += .3;
+    			 herolocation.setLocation(x, y);
+    		 }
          }
-    	 if(issolid(x, y+50, 3)){
+    	 if(myinput.isKeyDown(myinput.KEY_P))
+         {
+    		for(int i = 0; i < world.map.size();i++)
+    			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
+         }
+    	 if(issolidfalling(x, y, herolocation)){
     		 y+=.5;
+    		 herolocation.setLocation(x, y);
     	 }else
     		 onground = true;
     	 if(jumping && jumplength < 150){
     		 y -=1.0;
+    		 herolocation.setLocation(x, y);
     		 jumplength++;
     		 if(jumplength >= 150){
     			 jumplength = 0;
@@ -84,25 +102,61 @@ public class Wrapper extends BasicGame{
     	 }
         
     }
- 
-    public boolean issolid(float x, float y, int direction){
-    	
-    	if(direction == 4 || direction == 3){
-    		if(room.terrain[(int) (x/50+1)][(int) (y/50)] != 0 || room.terrain[(int) (x/50)][(int) (y/50)] != 0 )
-    			return false;
+    public boolean issolid(float x, float y, Rectangle herolocation){
+		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
+		
+    	if(y  > gameheight){
+    		world.changeroom(room, 0, this);
     	}
-    	if(room.terrain[(int) (x/50)][(int) (y/50)] != 0)
+    	if(x < 0){
+    		world.changeroom(room, 3, this);
+    	}
+    	if(x > gamewidth){
+    		world.changeroom(room, 1, this);
+    	}	
+    	if(y < 0){
+    		world.changeroom(room, 2, this);
+    	}
+    		
+    	
+    	herolocation.setLocation(x, y);
+    	
+    	for(int i = 0; i < room.blocks.size();i++){
+    		if(herolocation.intersects(room.blocks.get(i))){
+    			herolocation.setLocation(tmpx, tmpy);
     			return false;
+    		}
+    	}
     	
+    	return true;
+    }
+ 
+    public boolean issolidfalling(float x, float y, Rectangle herolocation){
+		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
+		
+    	/**if(y  > gameheight){
+    		world.changeroom(room, 0, this);
+    	}
+    	if(x < 0){
+    		world.changeroom(room, 3, this);
+    	}
+    	if(x > gamewidth){
+    		world.changeroom(room, 1, this);
+    	}	
+    	if(y < 0){
+    		world.changeroom(room, 2, this);
+    	}**/
+    		
     	
-    	if(y  > gameheight)
-    		return false;
-    	if(x < 0)
-    		return false;
-    	if(x > gamewidth)
-    		return false;
-    	if(y < 0)
-    		return false;
+    	herolocation.setLocation(x, y);
+    	
+    	for(int i = 0; i < room.blocks.size();i++){
+    		if(herolocation.intersects(room.blocks.get(i))){
+    			herolocation.setLocation(tmpx, tmpy);
+    			return false;
+    		}
+    	}
+    	
     	return true;
     }
     
@@ -113,7 +167,7 @@ public class Wrapper extends BasicGame{
     {
     	background.draw(0,0);    	
     	hero.draw(x,y);
-    	Image brick = new Image("res/brick.jpg");
+    	Image brick = new Image("res/dirt.png");
     	for(int i = 0; i < room.width;i++){
     		for(int j = 0; j < room.height;j++){
     			if(room.terrain[i][j] == 1){
