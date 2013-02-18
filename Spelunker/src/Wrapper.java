@@ -50,6 +50,8 @@ public class Wrapper extends BasicGame{
     public void update(GameContainer gc, int delta) 
 			throws SlickException     
     {
+    	if(gc.hasFocus() == false)
+    		gc.pause();
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
     		if(issolid(x-1, y-1, herolocation)){
@@ -85,7 +87,7 @@ public class Wrapper extends BasicGame{
     		for(int i = 0; i < world.map.size();i++)
     			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
          }
-    	 if(issolidfalling(x, y, herolocation)){
+    	 if(issolid(x, y, herolocation)){
     		 y+=.5;
     		 herolocation.setLocation(x, y);
     	 }else
@@ -131,34 +133,6 @@ public class Wrapper extends BasicGame{
     	return true;
     }
  
-    public boolean issolidfalling(float x, float y, Rectangle herolocation){
-		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
-		
-    	/**if(y  > gameheight){
-    		world.changeroom(room, 0, this);
-    	}
-    	if(x < 0){
-    		world.changeroom(room, 3, this);
-    	}
-    	if(x > gamewidth){
-    		world.changeroom(room, 1, this);
-    	}	
-    	if(y < 0){
-    		world.changeroom(room, 2, this);
-    	}**/
-    		
-    	
-    	herolocation.setLocation(x, y);
-    	
-    	for(int i = 0; i < room.blocks.size();i++){
-    		if(herolocation.intersects(room.blocks.get(i))){
-    			herolocation.setLocation(tmpx, tmpy);
-    			return false;
-    		}
-    	}
-    	
-    	return true;
-    }
     
     
     
