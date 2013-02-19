@@ -39,7 +39,7 @@ public class World {
 					return map.get(i);
 				}
 			}
-			Room room = new Room(current.xlocation, current.ylocation+1,this);
+			Room room = new Room(current.xlocation, current.ylocation+1,this, "res/rooms.txt");
 			where.x = room.southx;
 			where.y = room.southy;
 			map.add(room);
@@ -56,7 +56,7 @@ public class World {
 					return map.get(i);
 				}
 			}
-			Room room = new Room(current.xlocation+1, current.ylocation,this);
+			Room room = new Room(current.xlocation+1, current.ylocation,this, "res/rooms.txt");
 			where.x = room.westx;
 			where.y = room.westy;
 			map.add(room);
@@ -73,7 +73,7 @@ public class World {
 					return map.get(i);
 				}
 			}
-			Room room = new Room(current.xlocation, current.ylocation-1, this);
+			Room room = new Room(current.xlocation, current.ylocation-1, this,  "res/rooms.txt");
 			where.x = room.northx;
 			where.y = room.northy;
 			map.add(room);
@@ -90,7 +90,7 @@ public class World {
 					return map.get(i);
 				}
 			}
-			Room room = new Room(current.xlocation-1, current.ylocation, this);
+			Room room = new Room(current.xlocation-1, current.ylocation, this,  "res/rooms.txt");
 			where.x = room.eastx;
 			where.y = room.easty;
 			map.add(room);
