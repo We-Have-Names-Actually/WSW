@@ -3,6 +3,7 @@ import java.util.LinkedList;
 
 public class World {
 	public LinkedList<Room> map = new LinkedList<Room>();
+	int possible = 2;
 	
 	World(){
 		Room start = new Room();
@@ -30,7 +31,7 @@ public class World {
 	
 	public Room changeroom(Room current, int direction, Wrapper where){
 		if(direction == 0){//north
-			System.out.println("going north");
+			//System.out.println("going north");
 			for(int i = 0; i < map.size(); i++){
 				if(map.get(i).xlocation == current.xlocation && map.get(i).ylocation == current.ylocation + 1){
 					where.x = map.get(i).southx;
@@ -44,10 +45,18 @@ public class World {
 			where.y = room.southy;
 			map.add(room);
 			where.room = room;
+//			possible--;
+//			if(room.eastexit && isroom(room.xlocation+1, room.ylocation) == false)
+//				possible++;
+//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
+//				possible++;
+//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
+//				possible++;
+			//System.out.println(possible);
 			return room;
 		}
 		if(direction == 1){//east
-			System.out.println("going east");
+			//System.out.println("going east");
 			for(int i = 0; i < map.size(); i++){
 				if(map.get(i).xlocation == current.xlocation + 1 && map.get(i).ylocation == current.ylocation){
 					where.x = map.get(i).westx;
@@ -61,10 +70,18 @@ public class World {
 			where.y = room.westy;
 			map.add(room);
 			where.room = room;
+//			possible--;
+//			if(room.southexit && isroom(room.xlocation, room.ylocation+1) == false)
+//				possible++;
+//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
+//				possible++;
+//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
+//				possible++;
+//			System.out.println(possible);
 			return room;
 		}
 		if(direction == 2){//south
-			System.out.println("going south");
+			//System.out.println("going south");
 			for(int i = 0; i < map.size(); i++){
 				if(map.get(i).xlocation == current.xlocation && map.get(i).ylocation == current.ylocation - 1){
 					where.x = map.get(i).northx;
@@ -78,10 +95,11 @@ public class World {
 			where.y = room.northy;
 			map.add(room);
 			where.room = room;
+			
 			return room;
 		}
 		if(direction == 3){//west
-			System.out.println("going west");
+			//System.out.println("going west");
 			for(int i = 0; i < map.size(); i++){
 				if(map.get(i).xlocation == current.xlocation - 1 && map.get(i).ylocation == current.ylocation){
 					where.x = map.get(i).eastx;
@@ -95,6 +113,14 @@ public class World {
 			where.y = room.easty;
 			map.add(room);
 			where.room = room;
+//			possible--;
+//			if(room.southexit && isroom(room.xlocation, room.ylocation+1) == false)
+//				possible++;
+//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
+//				possible++;
+//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
+//				possible++;
+//			System.out.println(possible);
 			return room;
 		}
 		return map.getFirst();

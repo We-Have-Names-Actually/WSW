@@ -57,8 +57,8 @@ public class Wrapper extends BasicGame{
     public void update(GameContainer gc, int delta) 
 			throws SlickException     
     {
-    	if(gc.hasFocus() == false)
-    		gc.pause();
+    	//if(gc.hasFocus() == false)
+    		//gc.pause();
 
     	 if(myinput.isKeyDown(Input.KEY_SPACE))
     	 {
@@ -109,7 +109,7 @@ public class Wrapper extends BasicGame{
          }
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
-    		 if(issolid(x, y-1, herolocation) && onground == true){
+    		 if(onground == true){
     			 jumping = true;
     			 onground = false;
     		 }
@@ -131,16 +131,17 @@ public class Wrapper extends BasicGame{
     		 herolocation.setLocation(x, y);
     	 }else
     		 onground = true;
-    	 if(jumping && jumplength < 200){
+    	 if(jumping && jumplength < 250 && issolid(x, y-1, herolocation)){
     		 y -=1.0;
     		 herolocation.setLocation(x, y);
     		 jumplength++;
-    		 if(jumplength >= 200){
+    		 if(jumplength >= 250){
     			 jumplength = 0;
     			 jumping = false;
     		 }
     			 
-    	 }
+    	 }else
+    		 jumping = false;
     	 
     	 for(Entity entity : room.enemies)
     	 {
@@ -194,7 +195,7 @@ public class Wrapper extends BasicGame{
     	if(x > gamewidth){
     		world.changeroom(room, 1, this);
     	}	
-    	if(y < 0){
+    	if(y+1 < 0){
     		world.changeroom(room, 2, this);
     	}
     		
@@ -258,6 +259,7 @@ public class Wrapper extends BasicGame{
          AppGameContainer app = 
 			new AppGameContainer(new Wrapper());
          app.setDisplayMode(gamewidth, gameheight, false);
+         app.setTargetFrameRate(60);
          app.start();
     }
 }

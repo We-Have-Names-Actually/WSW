@@ -64,28 +64,28 @@ public class Room {
 			if(world.roomat(xlocation, ylocation + 1).northexit){
 				southexit = true;
 			}
-		}else if(getRand(0,2) == 0){
+		}else if(getRand(0,3) == 1){
 			southexit = true;
 		}
 		if(world.isroom(xlocation, ylocation-1)){
 			if(world.roomat(xlocation, ylocation - 1).southexit){
 				northexit = true;
 			}
-		}else if(getRand(0,2) == 0){
+		}else if(getRand(0,3) == 1){
 			northexit = true;
 		}
 		if(world.isroom(xlocation-1, ylocation)){
 			if(world.roomat(xlocation-1, ylocation).eastexit){
 				westexit = true;
 			}
-		}else if(getRand(0,1) == 0){
+		}else if(getRand(0,2) == 1){
 			westexit = true;
 		}
 		if(world.isroom(xlocation+1, ylocation)){
 			if(world.roomat(xlocation+1, ylocation).westexit){
 				eastexit = true;
 			}
-		}else if(getRand(0,1) == 0){
+		}else if(getRand(0,2) == 1){
 			eastexit = true;
 		}
 		
@@ -107,7 +107,6 @@ public class Room {
 		southy = 400;
 		
 		int numrooms = input.nextInt();
-		System.out.println(numrooms);
 		
 		int iterator = getRand(0, numrooms-1);
 		
@@ -115,43 +114,89 @@ public class Room {
 			input.nextLine();
 		}
 		
-    	for(int i = 0; i < 280; i++){
-    			terrain[c%20][(c)/20] = input.next().charAt(0);
-    			if((terrain[c%20][c/20] == 'n' || terrain[c%20][c/20] == 'N')&& northexit == false){
-    				terrain[c%20][c/20] = '1';
-    			}
-    			if((terrain[c%20][c/20] == 'w' || terrain[c%20][c/20] == 'W')&& westexit == false){
-    				terrain[c%20][c/20] = '1';
-    			}
-    			if((terrain[c%20][c/20] == 'e' || terrain[c%20][c/20] == 'E') && eastexit == false){
-    				terrain[c%20][c/20] = '1';
-    			}
-    			if((terrain[c%20][c/20] == 's') && southexit == false){
-    				terrain[c%20][c/20] = '1';
-    			}
-    			if(terrain[c%20][c/20] == 'S'){
-    				northx = (c%20)*50;
-    				northy = (c/20)*50;
-    			}
-    			if(terrain[c%20][c/20] == 'N'){
-    				southx = (c%20)*50;
-    				southy = (c/20)*50;
-    			}
-    			if(terrain[c%20][c/20] == 'W'){
-    				westx = (c%20)*50;
-    				westy = (c/20)*50;
-    			}
-    			if(terrain[c%20][c/20] == 'E'){
-    				eastx = (c%20)*50;
-    				easty = (c/20)*50;
-    			}
-    				
-    			if(terrain[c%20][(c)/20] == '1'){
-    				Rectangle brick = new Rectangle((c%20)*50, ((c)/20)*50, 49, 49);
-    				blocks.add(brick);
-    			}
-    			c++;
-    	}
+    	
+    	world.possible--;
+    	if(northexit && world.isroom(xlocation, ylocation-1) == false)
+			world.possible++;
+		if(eastexit && world.isroom(xlocation+1, ylocation) == false)
+			world.possible++;
+		if(westexit && world.isroom(xlocation-1, ylocation) == false)
+			world.possible++;
+		if(southexit && world.isroom(xlocation, ylocation+1) == false)
+			world.possible++;
+		System.out.println(world.possible);
+		if(world.possible == 0){
+			System.out.println("trying to keep your game from being fucked.");
+			boolean working = true;
+			int count = 0;
+			while(working){
+				int choice = getRand(0,3);
+				if(choice == 0 && world.isroom(xlocation, ylocation-1) == false && northexit == false){
+					working = false;
+					northexit = true;
+					world.possible++;
+				}
+				if(choice == 1 && world.isroom(xlocation+1, ylocation) == false && eastexit == false){
+					working = false;
+					eastexit = true;
+					world.possible++;
+				}
+				if(choice == 2 && world.isroom(xlocation, ylocation+1) == false && southexit == false){
+					working = false;
+					southexit = true;
+					world.possible++;
+				}
+				if(choice == 3 && world.isroom(xlocation-1, ylocation) == false && southexit == false){
+					working = false;
+					southexit = true;
+					world.possible++;
+				}
+				count++;
+				if(count > 15){
+					working = false;
+					System.out.println("sorry your game is fucked.");
+				}
+			}
+		}
+		
+		
+		for(int i = 0; i < 280; i++){
+			terrain[c%20][(c)/20] = input.next().charAt(0);
+			if((terrain[c%20][c/20] == 'n' || terrain[c%20][c/20] == 'N')&& northexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if((terrain[c%20][c/20] == 'w' || terrain[c%20][c/20] == 'W')&& westexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if((terrain[c%20][c/20] == 'e' || terrain[c%20][c/20] == 'E') && eastexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if((terrain[c%20][c/20] == 's') && southexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if(terrain[c%20][c/20] == 'S'){
+				northx = (c%20)*50;
+				northy = (c/20)*50;
+			}
+			if(terrain[c%20][c/20] == 'N'){
+				southx = (c%20)*50;
+				southy = (c/20)*50;
+			}
+			if(terrain[c%20][c/20] == 'W'){
+				westx = (c%20)*50;
+				westy = (c/20)*50;
+			}
+			if(terrain[c%20][c/20] == 'E'){
+				eastx = (c%20)*50;
+				easty = (c/20)*50;
+			}
+				
+			if(terrain[c%20][(c)/20] == '1'){
+				Rectangle brick = new Rectangle((c%20)*50, ((c)/20)*50, 49, 49);
+				blocks.add(brick);
+			}
+			c++;
+	}
 		
 	}
 	
