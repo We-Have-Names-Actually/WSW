@@ -14,6 +14,7 @@ public class Entity {
 	public int x;
 	public int y;
 	private int health = 2;
+	private int damage = 1;
 	public Rectangle location;
 	
 	Entity(String path)
@@ -93,7 +94,7 @@ public class Entity {
 		this.type = type;
 	}
 	
-	public boolean damage(int damage)
+	public boolean applyDamage(int damage)
 	{
 		health -= damage;
 		if(health <= 0)
@@ -108,6 +109,16 @@ public class Entity {
 			}
 		}
 		return true;
+	}
+	
+	public int getDamage()
+	{
+		return this.damage;
+	}
+	
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
 	}
 	
 	public void move(int x, int y)

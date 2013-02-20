@@ -30,6 +30,7 @@ public class Wrapper extends BasicGame{
 	private boolean jumping, onground, facingLeft;
 	private int health = 5;
 	private int damage = 5;
+	private int frames = 0;
  
     public Wrapper()
     {
@@ -48,6 +49,8 @@ public class Wrapper extends BasicGame{
 		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
         room = world.map.getFirst();
+        room.enemies.add(new Entity("res/tails.png", 500, 500));
+        room.enemies.get(0).setType(Entity.Type.ENEMY);
     }
  
     @Override
@@ -57,7 +60,7 @@ public class Wrapper extends BasicGame{
     	if(gc.hasFocus() == false)
     		gc.pause();
 
-    	 if(myinput.isKeyDown(Input.KEY_SPACE))
+    	 if(myinput.isKeyPressed(Input.KEY_SPACE))
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -67,13 +70,14 @@ public class Wrapper extends BasicGame{
     			 modifier = -20;
     		 }
     		 tempImg.add(new Entity("res/hitbox.jpg", (int)x+modifier, (int)y));
+    		 
     		 Rectangle attack = new Rectangle(x+modifier, y-49, 25, 50);
     		 for(Entity enemy : room.enemies)
     		 {
     			 if(enemy.type == Entity.Type.ENEMY && enemy.collision(attack))
     			 {
     				 hit = true;
-    				 if(!enemy.damage(1))
+    				 if(!enemy.applyDamage(1))
     				 {
     					 toRemove = room.enemies.indexOf(enemy);
     				 }
@@ -89,7 +93,7 @@ public class Wrapper extends BasicGame{
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
     		 facingLeft = true;
-    		if(issolid(x-1, y-1, herolocation)){
+    		if(issolid(x-1, y-1, herolocation, false)){
     			 x-=.4;
     			 herolocation.setLocation(x, y);
     		 }else
@@ -98,7 +102,7 @@ public class Wrapper extends BasicGame{
     	 if(myinput.isKeyDown(myinput.KEY_D) || myinput.isKeyDown(myinput.KEY_RIGHT))
          {
     		 facingLeft = false;
-    		 if(issolid(x+1, y-1, herolocation)){
+    		 if(issolid(x+1, y-1, herolocation, false)){
     			 x+= .4;
     			 herolocation.setLocation(x, y);
     		 }else
@@ -106,14 +110,14 @@ public class Wrapper extends BasicGame{
          }
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
-    		 if(issolid(x, y-1, herolocation) && onground == true){
+    		 if(issolid(x, y-1, herolocation, false) && onground == true){
     			 jumping = true;
     			 onground = false;
     		 }
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
-    		 if(issolid(x, y, herolocation)){
+    		 if(issolid(x, y, herolocation, false)){
     			 y += .3;
     			 herolocation.setLocation(x, y);
     		 }
@@ -123,7 +127,7 @@ public class Wrapper extends BasicGame{
     		for(int i = 0; i < world.map.size();i++)
     			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
          }
-    	 if(issolid(x, y, herolocation)){
+    	 if(issolid(x, y, herolocation, false)){
     		 y+=.5;
     		 herolocation.setLocation(x, y);
     	 }else
@@ -141,14 +145,30 @@ public class Wrapper extends BasicGame{
     	 
     	 for(Entity entity : room.enemies)
     	 {
-    		 if(entity.y < 700 && issolid(entity.x, entity.y+1, entity.location))
-    			 entity.move(entity.x, entity.y+1);
+    		 if(frames == 30)
+    	    	{
+    				 
+    				 if(x > entity.x)
+    				 {
+    					 if(!issolid(entity.x+5, entity.y, entity.location, true))
+    					 {
+    						 entity.move((int)entity.x+5, (int)entity.y);
+    					 }
+    				 }
+    				 else
+    				 {
+    					 if(!issolid(entity.x-5, entity.y, entity.location, true))
+    					 {
+    						 entity.move((int)entity.x-5, (int)entity.y);
+    					 }
+    				 }
+    		    	frames = 0;
+    	    	}
     		 
-    		 if(x > entity.x)
-    			 entity.move((int)x+1, (int)y);
-    		 else
-    			 entity.move((int)x-1, (int)y);
-    		 
+    		 if(issolid(entity.x, entity.y+1, entity.location, true))
+ 	    	{
+ 				 entity.move(entity.x, entity.y+1);
+ 	    	}
     		 if(entity.collision(herolocation))
     		 {
     			 //This is about where we need to decide if the player dies or whatever
@@ -179,19 +199,19 @@ public class Wrapper extends BasicGame{
     	 }
         
     }
-    public boolean issolid(float x, float y, Rectangle herolocation){
+    public boolean issolid(float x, float y, Rectangle herolocation, boolean enemy){
 		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
 		
-    	if(y  > gameheight){
+    	if(y  > gameheight && !enemy){
     		world.changeroom(room, 0, this);
     	}
-    	if(x < 0){
+    	if(x < 0 && !enemy){
     		world.changeroom(room, 3, this);
     	}
-    	if(x > gamewidth){
+    	if(x > gamewidth && !enemy){
     		world.changeroom(room, 1, this);
     	}	
-    	if(y < 0){
+    	if(y < 0 && !enemy){
     		world.changeroom(room, 2, this);
     	}
     		
@@ -214,6 +234,8 @@ public class Wrapper extends BasicGame{
     public void render(GameContainer gc, Graphics g) 
 			throws SlickException 
     {
+    	frames++;
+		 
     	background.draw(0,0);    	
     	hero.draw(x,y);
     	
