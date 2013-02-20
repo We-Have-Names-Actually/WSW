@@ -26,12 +26,14 @@ public class Wrapper extends BasicGame{
 	Room room;
 	private Image background;
 	private Image hero;
+	private Image heroleft;
+	private Image heroright;
 	private Rectangle herolocation;
 	private World world;
 	private ArrayList<Entity> tempImg;
 	public float x = 400, y = 300;
 	private int jumplength = 0;
-	private boolean jumping, onground, facingLeft;
+	private boolean jumping, onground, facingLeft, facingRight;
 	private int health = 5;
 	private int damage = 5;
 	private int frames = 0;
@@ -48,6 +50,8 @@ public class Wrapper extends BasicGame{
 		gc.setMinimumLogicUpdateInterval(1);
 		world = new World();
 		hero = new Image("res/hero.png");
+		heroleft = new Image("res/heroleft.png");
+		heroright = new Image("res/heroright.png");
 		background = new Image("res/cave.jpg");
 		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
@@ -96,21 +100,23 @@ public class Wrapper extends BasicGame{
     	 if(myinput.isKeyDown(myinput.KEY_A) || myinput.isKeyDown(myinput.KEY_LEFT) )
          {
     		 facingLeft = true;
-    		if(issolid(x-1, y-1, herolocation, false)){
+    		if(issolid(x-1, y-1, herolocation)){
     			 x-=.4;
     			 herolocation.setLocation(x, y);
     		 }else
     			 onground = true;
-         }
+         }else
+        	 facingLeft = false;
     	 if(myinput.isKeyDown(myinput.KEY_D) || myinput.isKeyDown(myinput.KEY_RIGHT))
          {
-    		 facingLeft = false;
-    		 if(issolid(x+1, y-1, herolocation, false)){
+    		 facingRight = true;
+    		 if(issolid(x+1, y-1, herolocation)){
     			 x+= .4;
     			 herolocation.setLocation(x, y);
     		 }else
     			 onground = true;
-         }
+         }else
+        	 facingRight = false;
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
     		 if(onground == true){
@@ -120,7 +126,7 @@ public class Wrapper extends BasicGame{
          }
     	 if(myinput.isKeyDown(myinput.KEY_S) || myinput.isKeyDown(myinput.KEY_DOWN))
          {
-    		 if(issolid(x, y, herolocation, false)){
+    		 if(issolid(x, y, herolocation)){
     			 y += .3;
     			 herolocation.setLocation(x, y);
     		 }
@@ -130,12 +136,12 @@ public class Wrapper extends BasicGame{
     		for(int i = 0; i < world.map.size();i++)
     			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
          }
-    	 if(issolid(x, y, herolocation, false)){
+    	 if(issolid(x, y, herolocation)){
     		 y+=.5;
     		 herolocation.setLocation(x, y);
     	 }else
     		 onground = true;
-    	 if(jumping && jumplength < 250 && issolid(x, y-1, herolocation, true)){
+    	 if(jumping && jumplength < 250 && issolid(x, y-1, herolocation)){
     		 y -=1.0;
     		 herolocation.setLocation(x, y);
     		 jumplength++;
@@ -147,29 +153,31 @@ public class Wrapper extends BasicGame{
     	 }else
     		 jumping = false;
     	 
+    	 
     	 for(Entity entity : room.enemies)
     	 {
-    		 if(frames == 30)
+    		 if(frames % 7 == 0)
     	    	{
     				 
-    				 if(x > entity.x)
+    				 if(!entity.goingleft)
     				 {
-    					 if(!issolid(entity.x+5, entity.y, entity.location, true))
+    					 if(enemysolid(entity.x + 1, entity.y, entity.location))
     					 {
-    						 entity.move((int)entity.x+5, (int)entity.y);
-    					 }
+    						 entity.move(entity.x+1, entity.y);
+    					 }else
+    						 entity.goingleft = true;
     				 }
     				 else
     				 {
-    					 if(!issolid(entity.x-5, entity.y, entity.location, true))
+    					 if(enemysolid(entity.x-1, entity.y, entity.location))
     					 {
-    						 entity.move((int)entity.x-5, (int)entity.y);
-    					 }
+    						 entity.move((int)entity.x-1, (int)entity.y);
+    					 }else
+    						 entity.goingleft = false;
     				 }
-    		    	frames = 0;
     	    	}
     		 
-    		 if(issolid(entity.x, entity.y+1, entity.location, true))
+    		if(enemysolid(entity.x, entity.y+1, entity.location))
  	    	{
  				 entity.move(entity.x, entity.y+1);
  	    	}
@@ -203,19 +211,45 @@ public class Wrapper extends BasicGame{
     	 }
         
     }
-    public boolean issolid(float x, float y, Rectangle herolocation, boolean enemy){
+    
+    public boolean enemysolid(float x, float y, Rectangle enemy){
+    	float tmpy = enemy.getY(), tmpx = enemy.getX();
+    	if(y  > gameheight){
+    		return false;
+    	}
+    	if(x < 0){
+    		return false;
+    	}
+    	if(x + enemy.getWidth() > gamewidth){
+    		return false;
+    	}	
+    	if(y+1 < 0){
+    		return false;
+    	}
+    	
+    	enemy.setLocation(x, y);
+    	
+    	for(int i = 0; i < room.blocks.size();i++){
+    		if(enemy.intersects(room.blocks.get(i))){
+    			enemy.setLocation(tmpx, tmpy);
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    public boolean issolid(float x, float y, Rectangle herolocation){
 		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
 		
-    	if(y  > gameheight && !enemy){
+    	if(y  > gameheight){
     		world.changeroom(room, 0, this);
     	}
-    	if(x < 0 && !enemy){
+    	if(x < 0){
     		world.changeroom(room, 3, this);
     	}
-    	if(x > gamewidth && !enemy){
+    	if(x > gamewidth){
     		world.changeroom(room, 1, this);
     	}	
-    	if(y+1 < 0 && !enemy){
+    	if(y+1 < 0){
     		world.changeroom(room, 2, this);
     	}
     		
@@ -240,8 +274,13 @@ public class Wrapper extends BasicGame{
     {
     	frames++;
 		 
-    	background.draw(0,0);    	
-    	hero.draw(x,y);
+    	background.draw(0,0); 
+    	if(facingLeft)
+    		heroleft.draw(x,y);
+    	else if(facingRight)
+    		heroright.draw(x,y);
+    	else
+    		hero.draw(x,y);
     	
     	for(Entity entity : room.enemies)
     	{
@@ -281,7 +320,7 @@ public class Wrapper extends BasicGame{
          AppGameContainer app = 
 			new AppGameContainer(new Wrapper());
          app.setDisplayMode(gamewidth, gameheight, false);
-         app.setTargetFrameRate(60);
+         app.setTargetFrameRate(100);
          app.start();
     }
 }

@@ -12,10 +12,11 @@ public class Entity {
 	
 	public Image sprite;
 	public Type type;
-	public int x;
-	public int y;
+	public float x;
+	public float y;
 	private int health = 2;
 	private int damage = 1;
+	public boolean goingleft = true;;
 	public Rectangle location;
 	
 	Entity(String path)
@@ -122,7 +123,7 @@ public class Entity {
 		this.damage = damage;
 	}
 	
-	public void move(int x, int y)
+	public void move(float x, float y)
 	{
 		if(type == Type.ENEMY)
 		{
