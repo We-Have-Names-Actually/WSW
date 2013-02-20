@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="src/lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="src/lib/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Spelunker/src/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="World of Spelunking Warrior/src/lib"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/lib/phys2d-060408.jar"/>

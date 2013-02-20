@@ -128,6 +128,7 @@ public class Entity {
 		{
 			this.x = x;
 			this.y = y;
+			this.location = new Rectangle(this.x, this.y, sprite.getWidth(), sprite.getHeight());
 			this.draw();
 		}
 	}

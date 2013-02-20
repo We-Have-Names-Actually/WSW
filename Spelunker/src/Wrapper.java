@@ -63,7 +63,7 @@ public class Wrapper extends BasicGame{
     	//if(gc.hasFocus() == false)
     		//gc.pause();
 
-    	 if(myinput.isKeyPressed(Input.KEY_SPACE))
+    	 if(myinput.isKeyDown(Input.KEY_SPACE))
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -149,19 +149,22 @@ public class Wrapper extends BasicGame{
     	 
     	 for(Entity entity : room.enemies)
     	 {
+    		if(issolid(entity.x, entity.y+1, entity.location, true))
+  	    	{
+  				 entity.move(entity.x, entity.y+1);
+  	    	}
     		 if(frames == 30)
     	    	{
-    				 
     				 if(x > entity.x)
     				 {
-    					 if(!issolid(entity.x+5, entity.y, entity.location, true))
+    					 if(issolid(entity.x+5, entity.y, entity.location, true))
     					 {
     						 entity.move((int)entity.x+5, (int)entity.y);
     					 }
     				 }
     				 else
     				 {
-    					 if(!issolid(entity.x-5, entity.y, entity.location, true))
+    					 if(issolid(entity.x-5, entity.y, entity.location, true))
     					 {
     						 entity.move((int)entity.x-5, (int)entity.y);
     					 }
@@ -169,10 +172,7 @@ public class Wrapper extends BasicGame{
     		    	frames = 0;
     	    	}
     		 
-    		 if(issolid(entity.x, entity.y+1, entity.location, true))
- 	    	{
- 				 entity.move(entity.x, entity.y+1);
- 	    	}
+    		
     		 if(entity.collision(herolocation))
     		 {
     			 //This is about where we need to decide if the player dies or whatever
@@ -208,15 +208,19 @@ public class Wrapper extends BasicGame{
 		
     	if(y  > gameheight && !enemy){
     		world.changeroom(room, 0, this);
+    		return true;
     	}
     	if(x < 0 && !enemy){
     		world.changeroom(room, 3, this);
+    		return true;
     	}
     	if(x > gamewidth && !enemy){
     		world.changeroom(room, 1, this);
+    		return true;
     	}	
     	if(y+1 < 0 && !enemy){
     		world.changeroom(room, 2, this);
+    		return true;
     	}
     		
     	
