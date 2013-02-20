@@ -1,7 +1,11 @@
 
  
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -38,8 +42,7 @@ public class Wrapper extends BasicGame{
     }
  
     @Override
-    public void init(GameContainer gc) 
-			throws SlickException {
+    public void init(GameContainer gc) throws SlickException {
     	tempImg = new ArrayList<Entity>();
     	gc.setMaximumLogicUpdateInterval(1);
 		gc.setMinimumLogicUpdateInterval(1);
@@ -57,8 +60,8 @@ public class Wrapper extends BasicGame{
     public void update(GameContainer gc, int delta) 
 			throws SlickException     
     {
-    	if(gc.hasFocus() == false)
-    		gc.pause();
+    	//if(gc.hasFocus() == false)
+    		//gc.pause();
 
     	 if(myinput.isKeyPressed(Input.KEY_SPACE))
     	 {
@@ -110,7 +113,7 @@ public class Wrapper extends BasicGame{
          }
     	 if(myinput.isKeyDown(myinput.KEY_W) || myinput.isKeyDown(myinput.KEY_UP))
          {
-    		 if(issolid(x, y-1, herolocation, false) && onground == true){
+    		 if(onground == true){
     			 jumping = true;
     			 onground = false;
     		 }
@@ -132,16 +135,17 @@ public class Wrapper extends BasicGame{
     		 herolocation.setLocation(x, y);
     	 }else
     		 onground = true;
-    	 if(jumping && jumplength < 150){
+    	 if(jumping && jumplength < 250 && issolid(x, y-1, herolocation, true)){
     		 y -=1.0;
     		 herolocation.setLocation(x, y);
     		 jumplength++;
-    		 if(jumplength >= 150){
+    		 if(jumplength >= 250){
     			 jumplength = 0;
     			 jumping = false;
     		 }
     			 
-    	 }
+    	 }else
+    		 jumping = false;
     	 
     	 for(Entity entity : room.enemies)
     	 {
@@ -211,7 +215,7 @@ public class Wrapper extends BasicGame{
     	if(x > gamewidth && !enemy){
     		world.changeroom(room, 1, this);
     	}	
-    	if(y < 0 && !enemy){
+    	if(y+1 < 0 && !enemy){
     		world.changeroom(room, 2, this);
     	}
     		
@@ -250,11 +254,17 @@ public class Wrapper extends BasicGame{
     	}
     	tempImg.clear();
     	
-    	Image brick = new Image("res/dirt.png");
+    	Image bricktop = new Image("res/dirt.png");
+    	Image brick = new Image("res/dirtmid.png");
     	for(int i = 0; i < room.width;i++){
     		for(int j = 0; j < room.height;j++){
-    			if(room.terrain[i][j] == 1){
-    				brick.draw(i*50,j*50);
+    			if(room.terrain[i][j] == '1'){
+    				if(j == 0){
+    					brick.draw(i*50,j*50);
+    				}else if(room.terrain[i][j-1] == '1'){
+    					brick.draw(i*50,j*50);
+    				}else
+    					bricktop.draw(i*50,j*50);
     			}
     		}
     	}
@@ -263,6 +273,7 @@ public class Wrapper extends BasicGame{
     	//spike.draw(900, 650);
 
     }
+   
  
     public static void main(String[] args) 
 			throws SlickException
@@ -270,6 +281,7 @@ public class Wrapper extends BasicGame{
          AppGameContainer app = 
 			new AppGameContainer(new Wrapper());
          app.setDisplayMode(gamewidth, gameheight, false);
+         app.setTargetFrameRate(60);
          app.start();
     }
 }
