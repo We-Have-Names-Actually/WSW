@@ -153,12 +153,10 @@ public class Wrapper extends BasicGame{
     		 //System.out.println("In entity loop");
     		if(issolid(entity.x, entity.y+1, entity.location, true))
   	    	{
-    			System.out.println("Entity loop falling");
   				 entity.move(entity.x, entity.y+1);
   	    	}
     		 if(frames == 30)
     	    	{
-    			 	System.out.println("Entity loop 30th frame");
     				 if(x > entity.x)
     				 {
     					 if(issolid(entity.x+5, entity.y, entity.location, true))
@@ -211,7 +209,6 @@ public class Wrapper extends BasicGame{
     	 
     	 if(frames == 30)
 		 {
-			 System.out.println("Resetting frames");
 			 frames = 0;
 		 }
         
