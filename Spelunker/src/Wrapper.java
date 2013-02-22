@@ -63,7 +63,7 @@ public class Wrapper extends BasicGame{
     	//if(gc.hasFocus() == false)
     		//gc.pause();
 
-    	 if(myinput.isKeyDown(Input.KEY_SPACE))
+    	 if(myinput.isKeyDown(Input.KEY_SPACE) && frames > 28)
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -129,6 +129,7 @@ public class Wrapper extends BasicGame{
          {
     		for(int i = 0; i < world.map.size();i++)
     			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
+    			System.out.println(room.enemies.get(0).location.getCenterX());
          }
     	 if(issolid(x, y, herolocation, false)){
     		 y+=.5;
@@ -149,12 +150,15 @@ public class Wrapper extends BasicGame{
     	 
     	 for(Entity entity : room.enemies)
     	 {
+    		 //System.out.println("In entity loop");
     		if(issolid(entity.x, entity.y+1, entity.location, true))
   	    	{
+    			System.out.println("Entity loop falling");
   				 entity.move(entity.x, entity.y+1);
   	    	}
     		 if(frames == 30)
     	    	{
+    			 	System.out.println("Entity loop 30th frame");
     				 if(x > entity.x)
     				 {
     					 if(issolid(entity.x+5, entity.y, entity.location, true))
@@ -169,11 +173,14 @@ public class Wrapper extends BasicGame{
     						 entity.move((int)entity.x-5, (int)entity.y);
     					 }
     				 }
-    		    	frames = 0;
+    		    	if(entity.collision(herolocation) && entity.type == Entity.Type.ENEMY)
+    		    	{
+    		    		health -= 1;
+    		    		System.out.println("Damage calc, player health: " + health);
+    		    	}
     	    	}
-    		 
     		
-    		 if(entity.collision(herolocation))
+    		 /*if(entity.collision(herolocation))
     		 {
     			 //This is about where we need to decide if the player dies or whatever
     			 switch(entity.type)
@@ -199,27 +206,33 @@ public class Wrapper extends BasicGame{
     				 break;
     				 
     			 }
-    		 }
+    		 }*/
     	 }
+    	 
+    	 if(frames == 30)
+		 {
+			 System.out.println("Resetting frames");
+			 frames = 0;
+		 }
         
     }
     public boolean issolid(float x, float y, Rectangle herolocation, boolean enemy){
 		float tmpy = herolocation.getY(), tmpx = herolocation.getX();
 		
     	if(y  > gameheight && !enemy){
-    		world.changeroom(room, 0, this);
+    		room = world.changeroom(room, 0, this);
     		return true;
     	}
     	if(x < 0 && !enemy){
-    		world.changeroom(room, 3, this);
+    		room = world.changeroom(room, 3, this);
     		return true;
     	}
     	if(x > gamewidth && !enemy){
-    		world.changeroom(room, 1, this);
+    		room = world.changeroom(room, 1, this);
     		return true;
     	}	
     	if(y+1 < 0 && !enemy){
-    		world.changeroom(room, 2, this);
+    		room = world.changeroom(room, 2, this);
     		return true;
     	}
     		
