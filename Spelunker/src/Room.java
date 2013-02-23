@@ -211,7 +211,7 @@ public class Room {
 			}
 			
 			if(terrain[c%20][c/20] == 'a'){
-				enemies.add(new Entity("res/rbear.png", (c%20)*50, ((c)/20)*50));
+				enemies.add(new Entity("res/lbear.png", "res/rbear.png", (c%20)*50, ((c)/20)*50-1));
 				enemies.get(enemies.size()-1).setType(Entity.Type.ENEMY);
 			}
 				

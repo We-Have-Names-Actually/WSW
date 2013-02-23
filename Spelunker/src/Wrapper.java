@@ -57,7 +57,7 @@ public class Wrapper extends BasicGame{
 		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
         room = world.map.getFirst();
-        room.enemies.add(new Entity("res/rbear.png", 500, 500));
+        room.enemies.add(new Entity("res/lbear.png", "res/rbear.png", 500, 500));
         room.enemies.get(0).setType(Entity.Type.ENEMY);
     }
  
@@ -66,7 +66,36 @@ public class Wrapper extends BasicGame{
 			throws SlickException     
     {
     	//if(gc.hasFocus() == false)
-    		//gc.pause()
+    		//gc.pause();
+
+    	 if(myinput.isKeyDown(Input.KEY_SPACE) && frames > 28)
+    	 {
+    		 int toRemove = -1;
+    		 boolean hit = false;
+    		 int modifier = 49;
+    		 if(facingLeft == true)
+    		 {
+    			 modifier = -20;
+    		 }
+    		 tempImg.add(new Entity("res/hitbox.jpg", "res/test_sprite.jpg", (int)x+modifier, (int)y));
+    		 
+    		 Rectangle attack = new Rectangle(x+modifier, y-49, 25, 50);
+    		 for(Entity enemy : room.enemies)
+    		 {
+    			 if(enemy.type == Entity.Type.ENEMY && enemy.collision(attack))
+    			 {
+    				 hit = true;
+    				 if(!enemy.applyDamage(1))
+    				 {
+    					 toRemove = room.enemies.indexOf(enemy);
+    				 }
+    			 }
+    		 }
+    		 if (room.enemies.size() > toRemove && toRemove > -1 && hit == true){
+    			 room.enemies.remove(toRemove);
+    		 }
+    		 
+    	 }
     	 
     	 if(aPressed)
          {
@@ -347,7 +376,7 @@ public class Wrapper extends BasicGame{
 		 {
 			 modifier = -20;
 		 }
-		 tempImg.add(new Entity("res/hitbox.jpg", (int)x+modifier, (int)y));
+		 //tempImg.add(new Entity("res/hitbox.jpg", (int)x+modifier, (int)y));
 		 
 		 Rectangle attack = new Rectangle(x+modifier, y-49, 25, 50);
 		 for(Entity enemy : room.enemies)
