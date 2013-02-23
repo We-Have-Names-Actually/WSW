@@ -56,7 +56,7 @@ public class Wrapper extends BasicGame{
 		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
         room = world.map.getFirst();
-        room.enemies.add(new Entity("res/tails.png", 500, 500));
+        room.enemies.add(new Entity("res/rbear.png", 500, 500));
         room.enemies.get(0).setType(Entity.Type.ENEMY);
     }
  
@@ -67,7 +67,7 @@ public class Wrapper extends BasicGame{
     	//if(gc.hasFocus() == false)
     		//gc.pause();
 
-    	 if(myinput.isKeyDown(Input.KEY_SPACE))
+    	 if(myinput.isKeyDown(Input.KEY_SPACE) && frames > 28)
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -135,6 +135,7 @@ public class Wrapper extends BasicGame{
          {
     		for(int i = 0; i < world.map.size();i++)
     			System.out.println(world.map.get(i).xlocation + " " + world.map.get(i).ylocation);
+    			System.out.println(room.enemies.get(0).location.getCenterX());
          }
     	 if(issolid(x, y, herolocation)){
     		 y+=.5;
@@ -185,6 +186,15 @@ public class Wrapper extends BasicGame{
  				 entity.move(entity.x, entity.y+1);
  	    	}
     		 if(entity.collision(herolocation))
+    		    	if(entity.collision(herolocation) && entity.type == Entity.Type.ENEMY)
+    		    	{
+    		    		health -= 1;
+    		    		System.out.println("Damage calc, player health: " + health);
+    		    	}
+    	    	}
+    		
+    		 /*if(entity.collision(herolocation))
+>>>>>>> e923da661e1b262ea15410733f1a6d093c7e560c
     		 {
     			 //This is about where we need to decide if the player dies or whatever
     			 switch(entity.type)
@@ -210,8 +220,13 @@ public class Wrapper extends BasicGame{
     				 break;
     				 
     			 }
-    		 }
-    	 }
+    		 }*/
+    	 
+    	 
+    	 if(frames == 30)
+		 {
+			 frames = 0;
+		 }
         
     }
     

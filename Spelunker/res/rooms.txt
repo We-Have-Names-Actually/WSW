@@ -23,7 +23,7 @@ finish
 1 1 1 1 0 0 0 0 n 0 0 n n n n n n 1 1 1
 1 1 1 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1
 w w w 0 0 0 0 0 0 0 0 0 0 1 1 1 e e e e
-w w w 0 0 0 0 0 0 0 a 0 1 1 1 1 e e e e
+w w w 0 0 0 0 0 0 0 0 0 1 1 1 1 e e e e
 W w w 0 0 0 0 0 0 1 1 1 1 1 e e e e e e
 1 w w 0 0 0 0 0 0 e e e e e e e e e e E
 1 1 w w 1 S s s 0 e e e e e e e e e 1 1
@@ -49,7 +49,7 @@ finish
 w w 0 0 0 0 0 n n n 1 1 0 0 1 1 e e e e
 W w w 0 0 0 0 1 1 1 1 0 0 0 1 e e e e e
 w w w w 0 0 0 0 0 0 0 0 0 0 0 0 e e e E
-1 1 1 1 1 0 0 0 0 0 0 0 0 a 0 0 1 1 1 1
+1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1
 1 1 1 1 1 w w 0 0 1 1 1 1 1 1 1 1 1 1 1
 1 1 1 w w w w 1 0 0 0 1 1 1 1 1 1 1 1 1
 w w w w w w w 1 0 0 0 1 1 1 1 1 1 1 1 1
