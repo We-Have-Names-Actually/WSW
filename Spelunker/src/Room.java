@@ -39,7 +39,7 @@ public class Room {
 			Rectangle brick = new Rectangle(i*50, (height-1)*50, 50, 50);
 			blocks.add(brick);
 		}
-		for(int i = 0; i < 13;i++){
+		for(int i = 0; i < 3;i++){
 			int place = getRand(0,width-1);
 			int y = height-1;
 			boolean found = true;
@@ -54,6 +54,8 @@ public class Room {
 			}
 		}
 	}
+	
+	
 	Room(int xlocation, int ylocation,  World world, String source){
 		terrain = new char[20][14];
 		width = 20;
@@ -64,28 +66,28 @@ public class Room {
 			if(world.roomat(xlocation, ylocation + 1).northexit){
 				southexit = true;
 			}
-		}else if(getRand(0,3) == 1){
+		}else if(getRand(0,1) == 1){
 			southexit = true;
 		}
 		if(world.isroom(xlocation, ylocation-1)){
 			if(world.roomat(xlocation, ylocation - 1).southexit){
 				northexit = true;
 			}
-		}else if(getRand(0,3) == 1){
+		}else if(getRand(0,2) == 1){
 			northexit = true;
 		}
 		if(world.isroom(xlocation-1, ylocation)){
 			if(world.roomat(xlocation-1, ylocation).eastexit){
 				westexit = true;
 			}
-		}else if(getRand(0,2) == 1){
+		}else if(getRand(0,1) == 1){
 			westexit = true;
 		}
 		if(world.isroom(xlocation+1, ylocation)){
 			if(world.roomat(xlocation+1, ylocation).westexit){
 				eastexit = true;
 			}
-		}else if(getRand(0,2) == 1){
+		}else if(getRand(0,1) == 1){
 			eastexit = true;
 		}
 		
@@ -165,13 +167,25 @@ public class Room {
 			if((terrain[c%20][c/20] == 'n' || terrain[c%20][c/20] == 'N')&& northexit == false){
 				terrain[c%20][c/20] = '1';
 			}
+			if(terrain[c%20][c/20] == 'z' && northexit == true){
+				terrain[c%20][c/20] = '1';
+			}
 			if((terrain[c%20][c/20] == 'w' || terrain[c%20][c/20] == 'W')&& westexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if(terrain[c%20][c/20] == 'v' && westexit == true){
 				terrain[c%20][c/20] = '1';
 			}
 			if((terrain[c%20][c/20] == 'e' || terrain[c%20][c/20] == 'E') && eastexit == false){
 				terrain[c%20][c/20] = '1';
 			}
-			if((terrain[c%20][c/20] == 's') && southexit == false){
+			if(terrain[c%20][c/20] == 'x' && westexit == true){
+				terrain[c%20][c/20] = '1';
+			}
+			if((terrain[c%20][c/20] == 's' || terrain[c%20][c/20] == 'S') && southexit == false){
+				terrain[c%20][c/20] = '1';
+			}
+			if(terrain[c%20][c/20] == 'c' && southexit == true){
 				terrain[c%20][c/20] = '1';
 			}
 			if(terrain[c%20][c/20] == 'S'){
@@ -195,6 +209,12 @@ public class Room {
 				Rectangle brick = new Rectangle((c%20)*50, ((c)/20)*50, 49, 49);
 				blocks.add(brick);
 			}
+			
+			if(terrain[c%20][c/20] == 'a'){
+				enemies.add(new Entity("res/rbear.png", (c%20)*50, ((c)/20)*50));
+				enemies.get(enemies.size()-1).setType(Entity.Type.ENEMY);
+			}
+				
 			c++;
 	}
 		

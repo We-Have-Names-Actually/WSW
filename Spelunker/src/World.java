@@ -45,14 +45,6 @@ public class World {
 			where.y = room.southy;
 			map.add(room);
 			where.room = room;
-//			possible--;
-//			if(room.eastexit && isroom(room.xlocation+1, room.ylocation) == false)
-//				possible++;
-//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
-//				possible++;
-//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
-//				possible++;
-			//System.out.println(possible);
 			return room;
 		}
 		if(direction == 1){//east
@@ -70,14 +62,6 @@ public class World {
 			where.y = room.westy;
 			map.add(room);
 			where.room = room;
-//			possible--;
-//			if(room.southexit && isroom(room.xlocation, room.ylocation+1) == false)
-//				possible++;
-//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
-//				possible++;
-//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
-//				possible++;
-//			System.out.println(possible);
 			return room;
 		}
 		if(direction == 2){//south
@@ -113,14 +97,7 @@ public class World {
 			where.y = room.easty;
 			map.add(room);
 			where.room = room;
-//			possible--;
-//			if(room.southexit && isroom(room.xlocation, room.ylocation+1) == false)
-//				possible++;
-//			if(room.westexit && isroom(room.xlocation-1, room.ylocation) == false)
-//				possible++;
-//			if(room.northexit && isroom(room.xlocation, room.ylocation-1) == false)
-//				possible++;
-//			System.out.println(possible);
+
 			return room;
 		}
 		return map.getFirst();
