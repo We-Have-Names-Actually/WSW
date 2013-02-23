@@ -31,7 +31,7 @@ public class Wrapper extends BasicGame{
 	private ArrayList<Entity> tempImg;
 	public float x = 400, y = 300;
 	private int jumplength = 0;
-	private boolean jumping, onground, facingLeft;
+	private boolean jumping, onground, facingLeft, aPressed = false, wPressed = false, dPressed = false, sPressed = false;
 	private int health = 5;
 	private int damage = 5;
 	private int frames = 0;
@@ -297,5 +297,50 @@ public class Wrapper extends BasicGame{
          app.setDisplayMode(gamewidth, gameheight, false);
          app.setTargetFrameRate(60);
          app.start();
+    }
+    
+    public void keyPressed(int button, char c)
+    {
+    	if(button == Input.KEY_W || button == Input.KEY_UP)
+    	{
+    		wPressed = true;
+    	}
+    	else if(button == Input.KEY_A || button == Input.KEY_LEFT)
+    	{
+    		aPressed = true;
+    	}
+    	else if(button == Input.KEY_D || button == Input.KEY_RIGHT)
+    	{
+    		dPressed = true;
+    	}
+    	else if(button == Input.KEY_S || button == Input.KEY_DOWN)
+    	{
+    		sPressed = true;
+    	}
+    }
+    
+    public void keyReleased(int button, char c)
+    {
+    	if(button == Input.KEY_W || button == Input.KEY_UP)
+    	{
+    		wPressed = true;
+    	}
+    	else if(button == Input.KEY_A || button == Input.KEY_LEFT)
+    	{
+    		aPressed = true;
+    	}
+    	else if(button == Input.KEY_D || button == Input.KEY_RIGHT)
+    	{
+    		dPressed = true;
+    	}
+    	else if(button == Input.KEY_S || button == Input.KEY_DOWN)
+    	{
+    		sPressed = true;
+    	}
+    	else if(button == Input.KEY_SPACE)
+    	{
+    		playerAttack();
+    	}
+    	
     }
 }
