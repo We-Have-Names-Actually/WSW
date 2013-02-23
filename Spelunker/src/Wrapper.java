@@ -67,7 +67,7 @@ public class Wrapper extends BasicGame{
     	//if(gc.hasFocus() == false)
     		//gc.pause();
 
-    	 if(myinput.isKeyPressed(Input.KEY_SPACE))
+    	 if(myinput.isKeyDown(Input.KEY_SPACE))
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -156,12 +156,15 @@ public class Wrapper extends BasicGame{
     	 
     	 for(Entity entity : room.enemies)
     	 {
+    		if(enemysolid(entity.x, entity.y+1, entity.location))
+  	    	{
+  				 entity.move(entity.x, entity.y+1);
+  	    	}
     		 if(frames % 7 == 0)
     	    	{
-    				 
     				 if(!entity.goingleft)
     				 {
-    					 if(enemysolid(entity.x + 1, entity.y, entity.location))
+    					 if(enemysolid(entity.x+1, entity.y, entity.location))
     					 {
     						 entity.move(entity.x+1, entity.y);
     					 }else
@@ -242,15 +245,19 @@ public class Wrapper extends BasicGame{
 		
     	if(y  > gameheight){
     		world.changeroom(room, 0, this);
+    		return true;
     	}
     	if(x < 0){
     		world.changeroom(room, 3, this);
+    		return true;
     	}
     	if(x > gamewidth){
     		world.changeroom(room, 1, this);
+    		return true;
     	}	
     	if(y+1 < 0){
     		world.changeroom(room, 2, this);
+    		return true;
     	}
     		
     	
