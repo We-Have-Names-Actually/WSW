@@ -68,7 +68,7 @@ public class Wrapper extends BasicGame{
     	//if(gc.hasFocus() == false)
     		//gc.pause();
 
-    	 if(myinput.isKeyDown(Input.KEY_SPACE) && frames > 28)
+    	 /*if(myinput.isKeyDown(Input.KEY_SPACE) && frames > 28)
     	 {
     		 int toRemove = -1;
     		 boolean hit = false;
@@ -95,7 +95,7 @@ public class Wrapper extends BasicGame{
     			 room.enemies.remove(toRemove);
     		 }
     		 
-    	 }
+    	 }*/
     	 
     	 if(aPressed)
          {
