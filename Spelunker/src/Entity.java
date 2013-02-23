@@ -10,7 +10,7 @@ public class Entity {
 		ENEMY, OBJECT, OBSTACLE, KILL_BOX
 	}
 	
-	public Image sprite;
+	public Image leftsprite, rightsprite;
 	public Type type;
 	public float x;
 	public float y;
@@ -19,10 +19,11 @@ public class Entity {
 	public boolean goingleft = true;;
 	public Rectangle location;
 	
-	Entity(String path)
+	Entity(String path, String other)
 	{
 		try {
-			this.sprite = new Image(path);
+			this.leftsprite = new Image(path);
+			this.rightsprite = new Image(other);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,9 +33,9 @@ public class Entity {
 		init();
 	}
 	
-	Entity(Image sprite)
+	Entity(Image sprite, Image other)
 	{
-		this.sprite = sprite;
+		this.leftsprite = sprite;
 		this.x = 0;
 		this.y = 0;
 		init();
@@ -42,16 +43,17 @@ public class Entity {
 	
 	Entity(Image sprite, int x, int y)
 	{
-		this.sprite = sprite;
+		this.leftsprite = sprite;
 		this.x = x;
 		this.y = y;
 		init();
 	}
 	
-	Entity(String path, int x, int y)
+	Entity(String path, String other, int x, int y)
 	{
 		try {
-			this.sprite = new Image(path);
+			this.leftsprite = new Image(path);
+			this.rightsprite = new Image(other);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,13 +65,16 @@ public class Entity {
 	
 	private void init()
 	{
-		this.location = new Rectangle(this.x, this.y, sprite.getWidth(), sprite.getHeight());
-		this.sprite.draw(this.x, this.y);
+		this.location = new Rectangle(this.x, this.y, leftsprite.getWidth(), leftsprite.getHeight());
+		this.leftsprite.draw(this.x, this.y);
 	}
 	
 	public void draw()
 	{
-		this.sprite.draw(this.x, this.y);
+		if(goingleft)
+			this.leftsprite.draw(this.x, this.y);
+		else
+			this.rightsprite.draw(this.x, this.y);
 	}
 	
 	/*
@@ -82,8 +87,8 @@ public class Entity {
 	 */
 	public boolean collision(Rectangle sprite)
 	{
-		int myHeight = this.sprite.getHeight();
-		int myWidth = this.sprite.getWidth();
+		int myHeight = this.leftsprite.getHeight();
+		int myWidth = this.leftsprite.getWidth();
 		Rectangle self = new Rectangle(this.x, this.y, myWidth, myHeight);
 		if(sprite.intersects(self))
 			return true;
@@ -102,8 +107,10 @@ public class Entity {
 		if(health <= 0)
 		{
 			try {
-				sprite.setAlpha((float) 0.0);
-				sprite.destroy();
+				leftsprite.setAlpha((float) 0.0);
+				leftsprite.destroy();
+				rightsprite.setAlpha((float) 0.0);
+				rightsprite.destroy();
 				return false;
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
@@ -129,7 +136,7 @@ public class Entity {
 		{
 			this.x = x;
 			this.y = y;
-			this.location = new Rectangle(this.x, this.y, sprite.getWidth(), sprite.getHeight());
+			this.location = new Rectangle(this.x, this.y, leftsprite.getWidth(), leftsprite.getHeight());
 			this.draw();
 		}
 	}

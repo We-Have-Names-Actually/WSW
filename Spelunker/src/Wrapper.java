@@ -56,7 +56,7 @@ public class Wrapper extends BasicGame{
 		herolocation = new Rectangle(x,y,49,49);
 		//SpriteSheet sheet = new SpriteSheet("res/tiles_nes.png", 16, 16);
         room = world.map.getFirst();
-        room.enemies.add(new Entity("res/rbear.png", 500, 500));
+        room.enemies.add(new Entity("res/lbear.png", "res/rbear.png", 500, 500));
         room.enemies.get(0).setType(Entity.Type.ENEMY);
     }
  
@@ -76,7 +76,7 @@ public class Wrapper extends BasicGame{
     		 {
     			 modifier = -20;
     		 }
-    		 tempImg.add(new Entity("res/hitbox.jpg", (int)x+modifier, (int)y));
+    		 tempImg.add(new Entity("res/hitbox.jpg", "res/test_sprite.jpg", (int)x+modifier, (int)y));
     		 
     		 Rectangle attack = new Rectangle(x+modifier, y-49, 25, 50);
     		 for(Entity enemy : room.enemies)
